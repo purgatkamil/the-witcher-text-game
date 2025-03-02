@@ -17,7 +17,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y build-essential
 
       - name: Build project (Linux)
-        run: make
+        run: make -C .
 
       - name: Upload artifact (Linux)
         uses: actions/upload-artifact@v4
@@ -41,10 +41,10 @@ jobs:
       - name: Verify Compiler
         run: g++ --version
 
-      - name: Build project (Windows)
+      - name: Build project (Windows) with static linking
         run: |
-          mkdir build
-          make CXX=g++
+          mkdir -p build
+          g++ -Wall -Wextra -std=c++17 App/*.cpp -static -static-libgcc -static-libstdc++ -o build/app.exe
 
       - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v4
