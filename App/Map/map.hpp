@@ -14,9 +14,10 @@ class Location {
         SubLocations childLocations;
         GlobalExits globalExits;
     
-        Location(std::string n) : name(n) {}
+        Location(std::string n, GameWorld& world) : name(n) {
+            world[n] = this; 
+        }
     
-        // Pobranie opisu danej lokacji
         std::string getDescription() {
             return Descriptions::getDescription(this);
         }
@@ -33,6 +34,6 @@ class Location {
             globalExits[direction] = target;
         }
     };
-
+    
 void createWorld(GameWorld& world, Location*& startingLocation);
 void displayLocation(Location* current);
