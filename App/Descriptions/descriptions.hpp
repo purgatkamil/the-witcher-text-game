@@ -6,10 +6,10 @@
 
 class Descriptions {
 public:
-    static DescriptionsMap descriptions;  // Mapa wskaźników na opisy
+    static DescriptionsMap descriptions;
 
-    static void initialize(GameWorld& world);  // Inicjalizacja opisów
-    static std::string getDescription(Location* location); // Pobranie opisu danej lokacji
+    static void initialize();
+    static std::string getDescription(Locations_e locationId);
 };
 
 #endif

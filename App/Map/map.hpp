@@ -10,16 +10,19 @@
 class Location {
     public:
         std::string name;
+        Locations_e id;
         LocalExits exits;
         SubLocations childLocations;
         GlobalExits globalExits;
     
-        Location(std::string n, GameWorld& world) : name(n) {
-            world[n] = this; 
+        Location(Locations_e id, std::string n, GameWorld& world) {
+            this->id = id;
+            this->name = n;
+            world[n] = this;
         }
-    
+        
         std::string getDescription() {
-            return Descriptions::getDescription(this);
+            return Descriptions::getDescription(this->id);
         }
     
         void addExit(std::string direction, Location* target) {

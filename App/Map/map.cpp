@@ -1,10 +1,10 @@
 #include "../Map/map.hpp"
 
 void createWorld(GameWorld& world, Location*& startingLocation) {
-    Location* KaerMorhen = new Location("KaerMorhen", world);
-        Location* KaerMorhen_Courtyard_Lower = new Location("KaerMorhen_Courtyard_Lower", world);
-        Location* KaerMorhen_Courtyard_Middle = new Location("KaerMorhen_Courtyard_Middle", world);
-        Location* KaerMorhen_Courtyard_Upper = new Location("KaerMorhen_Courtyard_Upper", world);
+    Location* KaerMorhen = new Location(KAER_MORHEN, "KaerMorhen", world);
+        Location* KaerMorhen_Courtyard_Lower = new Location(KAER_MORHEN_COURTYARD_LOWER, "Lower Courtyard", world);
+        Location* KaerMorhen_Courtyard_Middle = new Location(KAER_MORHEN_COURTYARD_MIDDLE, "Middle Courtyard", world);
+        Location* KaerMorhen_Courtyard_Upper = new Location(KAER_MORHEN_COURTYARD_UPPER, "Upper Courtyard", world);
 
         KaerMorhen->addChildLocation(KaerMorhen_Courtyard_Lower);
         KaerMorhen->addChildLocation(KaerMorhen_Courtyard_Middle);
