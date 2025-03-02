@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      - features/*
+      - jobs/*
 
 jobs:
   build-linux:
@@ -44,7 +46,7 @@ jobs:
       - name: Build project (Windows) with static linking
         run: |
           mkdir -p build
-          g++ -Wall -Wextra -std=c++17 App/*.cpp -static -static-libgcc -static-libstdc++ -o build/app.exe
+          make 
 
       - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v4
