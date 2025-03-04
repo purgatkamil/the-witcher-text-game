@@ -5,7 +5,7 @@ int main() {
     GameWorld world;
     Location* currentLocation = nullptr;
     createWorld(world, currentLocation);
-    Descriptions::initialize(world);  // Przypisujemy opisy do lokacji
+    Descriptions::initialize();  // Przypisujemy opisy do lokacji
 
     // Pętla gry
     std::string command;

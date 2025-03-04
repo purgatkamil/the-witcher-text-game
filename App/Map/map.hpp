@@ -8,31 +8,37 @@
 #include "../Descriptions/descriptions.hpp"
 
 class Location {
-    public:
-        std::string name;
-        LocalExits exits;
-        SubLocations childLocations;
-        GlobalExits globalExits;
-    
-        Location(std::string n) : name(n) {}
-    
-        // Pobranie opisu danej lokacji
-        std::string getDescription() {
-            return Descriptions::getDescription(this);
-        }
-    
-        void addExit(std::string direction, Location* target) {
-            exits[direction] = target;
-        }
-    
-        void addChildLocation(Location* child) {
-            childLocations[child->name] = child;
-        }
-    
-        void addGlobalExit(std::string direction, Location* target) {
-            globalExits[direction] = target;
-        }
-    };
+public:
+    std::string name;
+    std::string label;
+    Locations_e id;
+    LocalExits exits;
+    GlobalExits globalExits;
 
+    Location(Locations_e id, std::string n, std::string label, GameWorld& world) {
+        this->id = id;
+        this->name = n;
+        this->label = label;
+        world[n] = this;
+    }
+
+    std::string getDescription() {
+        return Descriptions::getDescription(this->id);
+    }
+
+    void addExit(Location* target) {
+        exits[target->label] = target;
+    }
+
+    void addGlobalExit(Location* target) {
+        globalExits[target->label] = target;
+    }
+
+    void connect(Location* locationB) {
+        this->addExit(locationB);
+        locationB->addExit(this);
+    }
+};
+    
 void createWorld(GameWorld& world, Location*& startingLocation);
 void displayLocation(Location* current);
