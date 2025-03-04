@@ -12,7 +12,6 @@ class Location {
         std::string name;
         Locations_e id;
         LocalExits exits;
-        SubLocations childLocations;
         GlobalExits globalExits;
     
         Location(Locations_e id, std::string n, GameWorld& world) {
