@@ -2,15 +2,13 @@
 #include "Character/character.hpp"
 
 int main() {
-    // Tworzymy świat gry
     GameWorld world;
     Geralt Geralt;
 
     createWorld(world, Geralt.getLocationPtr());
     
-    Descriptions::initialize();  // Przypisujemy opisy do lokacji
+    Descriptions::initialize();
 
-    // Pętla gry
     std::string command;
     while (true) {
         displayLocation(Geralt.getLocationPtr());
