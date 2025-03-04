@@ -1,5 +1,29 @@
 #include "../Map/map.hpp"
 
+Location::Location(Locations_e id, std::string n, std::string label, GameWorld& world) {
+    this->id = id;
+    this->name = n;
+    this->label = label;
+    world[n] = this;
+}
+
+std::string Location::getDescription() {
+    return Descriptions::getDescription(this->id);
+}
+
+void Location::addExit(Location* target) {
+    exits[target->label] = target;
+}
+
+void Location::addGlobalExit(Location* target) {
+    globalExits[target->label] = target;
+}
+
+void Location::connect(Location* locationB) {
+    this->addExit(locationB);
+    locationB->addExit(this);
+}
+
 void createWorld(GameWorld& world, Location*& startingLocation) {
     Location* KaerMorhen = new Location(KAER_MORHEN, "Kaer Morhen", "kaermorhen", world);
         Location* KaerMorhen_LowerCourtyard = new Location(KAER_MORHEN_COURTYARD_LOWER, "Lower Courtyard", "lower", world);
