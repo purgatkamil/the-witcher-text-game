@@ -50,7 +50,24 @@ public:
 };
 
 class GeraltStats {
-    // This class will be defined later
+    int strength;
+    int agility;
+    int stamina;
+    int intelligence;
+};
+
+class GeraltSigns {
+    vector<string> aard;
+    vector<string> igni;
+    vector<string> yrden;
+    vector<string> quen;
+    vector<string> aksji;
+};
+
+class FightingStyles {
+    vector<string> strong;
+    vector<string> fast;
+    vector<string> group;
 };
 
 class Geralt : public CombatCharacter {
@@ -58,6 +75,9 @@ class Geralt : public CombatCharacter {
     int toxicity;
     Location* current_location;
     GeraltStats stats;
+    GeraltSigns signs;
+    FightingStyles silverSword;
+    FightingStyles steelSword;
 public:
     Geralt();
 
