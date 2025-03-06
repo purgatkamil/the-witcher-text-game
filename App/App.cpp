@@ -1,5 +1,6 @@
 #include "Map/map.hpp"
 #include "Character/character.hpp"
+#include "Fight/fight.hpp"
 
 int main() {
     GameWorld world;
