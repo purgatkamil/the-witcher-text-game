@@ -15,10 +15,28 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake
+
+      - name: Cache Google Test
+        uses: actions/cache@v3
+        with:
+          path: googletest/build
+          key: ${{ runner.os }}-googletest
+
+      - name: Build Google Test
+        run: |
+          git clone https://github.com/google/googletest.git || true
+          cd googletest
+          mkdir -p build && cd build
+          cmake -G "Unix Makefiles" ..
+          make
+          cd ../..
 
       - name: Build project (Linux)
         run: make -C .
+
+      - name: Build and Run Tests (Linux)
+        run: make test
 
       - name: Upload artifact (Linux)
         uses: actions/upload-artifact@v4
@@ -42,10 +60,26 @@ jobs:
       - name: Verify Compiler
         run: g++ --version
 
-      - name: Build project (Windows) with static linking
+      - name: Cache Google Test
+        uses: actions/cache@v3
+        with:
+          path: googletest/build
+          key: ${{ runner.os }}-googletest
+
+      - name: Build Google Test
         run: |
-          mkdir -p build
-          make 
+          git clone https://github.com/google/googletest.git || true
+          mkdir -p googletest/build
+          cd googletest/build
+          cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ ..
+          mingw32-make
+          cd ../..
+
+      - name: Build project (Windows) with static linking
+        run: make
+
+      - name: Build and Run Tests (Windows)
+        run: make test
 
       - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v4
