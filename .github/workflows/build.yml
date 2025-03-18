@@ -1,4 +1,4 @@
-name: Build and Upload Artifact (C++)
+name: Build and Test (Windows)
 
 on:
   push:
@@ -7,7 +7,6 @@ on:
       - jobs/*
 
 jobs:
-
   build-windows:
     runs-on: windows-latest
 
@@ -28,29 +27,21 @@ jobs:
         uses: actions/cache@v3
         with:
           path: googletest/build
-          key: ${{ runner.os }}-googletest
+          key: windows-googletest
 
-      - name: Prepare Google Test
+      - name: Build Google Test
+        shell: pwsh
         run: |
           if (!(Test-Path "googletest")) { git clone https://github.com/google/googletest.git }
           if (!(Test-Path "googletest/build")) { New-Item -ItemType Directory -Path "googletest/build" }
-        shell: pwsh
-
-      - name: Build Google Test
-        run: |
           cd googletest/build
           if (!(Test-Path "lib/libgtest.a")) { cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ ..; mingw32-make }
-        shell: pwsh
-  
 
       - name: Build project (Windows) with static linking
         run: make
 
       - name: Build and Run Tests (Windows)
         run: make test
-
-      - name: Debug Build Directory (Windows)
-        run: dir build
 
       - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v4
