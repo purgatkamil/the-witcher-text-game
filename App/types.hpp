@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 
-class Location; // Forward declaration
+class Location;
 
 typedef enum 
 {
@@ -25,13 +25,10 @@ typedef enum
     NUMBER_OF_LOCATIONS,
 } Locations_e;
 
-// Definicja ogólnej mapy świata
 typedef std::map<std::string, Location*> GameWorld;
 
-// Alias dla przejść wewnątrz tej samej głównej lokacji
 typedef std::map<std::string, Location*> LocalExits;
 
-// Alias dla przejść do innych regionów
 typedef std::map<std::string, Location*> GlobalExits;
 
 typedef std::map<Locations_e, std::string> DescriptionsMap;

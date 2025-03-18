@@ -1,16 +1,18 @@
 #include "Map/map.hpp"
+#include "Character/character.hpp"
+#include "Fight/fight.hpp"
 
 int main() {
-    // Tworzymy świat gry
     GameWorld world;
-    Location* currentLocation = nullptr;
-    createWorld(world, currentLocation);
-    Descriptions::initialize();  // Przypisujemy opisy do lokacji
+    Geralt Geralt;
 
-    // Pętla gry
+    createWorld(world, Geralt.getLocationPtr());
+    
+    Descriptions::initialize();
+
     std::string command;
     while (true) {
-        displayLocation(currentLocation);
+        displayLocation(Geralt.getLocationPtr());
 
         std::cout << "\nEnter a direction to move (or 'exit' to quit): ";
         std::cin >> command;
@@ -20,11 +22,7 @@ int main() {
             break;
         }
 
-        if (currentLocation->exits.find(command) != currentLocation->exits.end()) {
-            currentLocation = currentLocation->exits[command];
-        } else {
-            std::cout << "You cannot go that way.\n";
-        }
+        Geralt.move(command);
     }
 
     return 0;
