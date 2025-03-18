@@ -32,13 +32,15 @@ jobs:
 
       - name: Prepare Google Test
         run: |
-          if [ ! -d "googletest" ]; then git clone https://github.com/google/googletest.git; fi
-          mkdir -p googletest/build
+          if (!(Test-Path "googletest")) { git clone https://github.com/google/googletest.git }
+          if (!(Test-Path "googletest/build")) { New-Item -ItemType Directory -Path "googletest/build" }
+        shell: pwsh
 
       - name: Build Google Test
         run: |
           cd googletest/build
-          if [ ! -f "lib/libgtest.a" ]; then cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ .. && mingw32-make; fi
+          if (!(Test-Path "lib/libgtest.a")) { cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ ..; mingw32-make }
+        shell: pwsh
   
 
       - name: Build project (Windows) with static linking
