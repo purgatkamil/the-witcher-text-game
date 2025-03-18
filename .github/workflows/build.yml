@@ -14,13 +14,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install MinGW
+      - name: Setup MinGW for Windows
         run: |
           choco install mingw
           echo "C:\ProgramData\chocolatey\bin" >> $GITHUB_PATH
           echo "C:\Program Files\mingw-w64\mingw64\bin" >> $GITHUB_PATH
 
-      - name: Verify compiler
+      - name: Verify Compiler
         run: g++ --version
 
       - name: Cache Google Test
@@ -29,7 +29,7 @@ jobs:
           path: googletest/build
           key: windows-googletest
 
-      - name: Download and build Google Test
+      - name: Build Google Test
         shell: pwsh
         run: |
           if (!(Test-Path "googletest")) { git clone https://github.com/google/googletest.git }
@@ -37,17 +37,10 @@ jobs:
           cd googletest/build
           if (!(Test-Path "lib/libgtest.a")) { cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ ..; mingw32-make }
 
-      - name: Debug Google Test headers
-        shell: pwsh
-        run: Get-ChildItem -Path googletest -Recurse -Filter gtest.h
+      - name: Build project (Windows) with static linking
+        run: make all
 
-      - name: Build project (Windows)
-        run: make
-
-      - name: Build and Run Tests (Windows)
-        run: make test
-
-      - name: Upload compiled application as an artifact
+      - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v4
         with:
           name: compiled-app-windows

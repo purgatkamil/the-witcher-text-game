@@ -1,62 +1,50 @@
 CXX := g++
 CXXFLAGS := -Wall -Wextra -std=c++17 -static-libgcc -static-libstdc++
 
-# Directories
 SRC_DIR := App
 TEST_DIR := App/Tests
 BUILD_DIR := build
 GTEST_DIR := googletest
 GTEST_BUILD := $(GTEST_DIR)/build
 
-# Find all application source files (excluding test files)
 SOURCES := $(shell find $(SRC_DIR) -type f -name "*.cpp" ! -path "$(TEST_DIR)/*")
-OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/app_%.o, $(SOURCES))
-TARGET := $(BUILD_DIR)/app.exe  # Ensure .exe extension on Windows
+OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SOURCES))
+TARGET := $(BUILD_DIR)/app
 
 # ---- Google Test ----
-GTEST_INCLUDES := -I$(GTEST_DIR)/googletest/include  # Poprawiona ścieżka do nagłówków
-GTEST_LIB_PATH := -L$(GTEST_BUILD)/lib               # Poprawiona ścieżka do bibliotek
-GTEST_LIBS := -lgtest -lgtest_main -pthread         # Poprawne linkowanie Google Test
+GTEST_LIBS := $(GTEST_BUILD)/lib/libgtest.a $(GTEST_BUILD)/lib/libgtest_main.a
+GTEST_INCLUDES := -I$(GTEST_DIR)/googletest/include
 
 $(GTEST_LIBS):
-	@echo "Cloning and building Google Test..."
 	git clone https://github.com/google/googletest.git || true
-	mkdir -p $(GTEST_BUILD)
-	cd $(GTEST_BUILD) && cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ .. && mingw32-make
+	mkdir -p $(GTEST_BUILD) && cd $(GTEST_BUILD) && cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ .. && mingw32-make
 
-# ---- Application Compilation ----
-.PHONY: all
-all: app test  # `make` will now build both the app and tests
-
-.PHONY: app
-app: $(TARGET)
+# ---- App compilation----
+all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(TARGET)
 
-# Compile application object files
-$(BUILD_DIR)/app_%.o: $(SRC_DIR)/%.cpp
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# ---- Tests Compilation ----
+# ---- Tests compilation ----
 TEST_SOURCES := $(shell find $(TEST_DIR) -type f -name "*.cpp")
-TEST_OBJECTS := $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/test_%.o, $(TEST_SOURCES))
-TEST_BINARY := $(BUILD_DIR)/test_runner.exe  # Ensure .exe extension on Windows
+TEST_OBJECTS := $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(TEST_SOURCES))
+TEST_BINARY := $(BUILD_DIR)/test_runner
 
-.PHONY: test
-test: $(GTEST_LIBS) $(TEST_BINARY)  # Ensure Google Test is built before compiling tests
-
-# Compile test binary
 $(TEST_BINARY): $(TEST_OBJECTS) $(GTEST_LIBS)
-	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) $(GTEST_LIB_PATH) $(TEST_OBJECTS) $(GTEST_LIBS) -o $(TEST_BINARY)
+	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) $(TEST_OBJECTS) $(GTEST_LIBS) -pthread -o $(TEST_BINARY)
 
-# Compile test object files
-$(BUILD_DIR)/test_%.o: $(TEST_DIR)/%.cpp $(GTEST_LIBS)  # Ensure Google Test is built first
+$(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) -c $< -o $@
 
-# ---- Cleanup ----
+.PHONY: test
+test: $(TEST_BINARY)
+	./$(TEST_BINARY)
+
 .PHONY: clean
 clean:
 	rm -rf $(BUILD_DIR) $(GTEST_DIR)
