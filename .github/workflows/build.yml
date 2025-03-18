@@ -26,7 +26,7 @@ jobs:
       - name: Cache Google Test
         uses: actions/cache@v3
         with:
-          path: googletest/build
+          path: googletest/install
           key: windows-googletest
 
       - name: Build Google Test
@@ -35,13 +35,23 @@ jobs:
           if (!(Test-Path "googletest")) { git clone https://github.com/google/googletest.git }
           if (!(Test-Path "googletest/build")) { New-Item -ItemType Directory -Path "googletest/build" }
           cd googletest/build
-          if (!(Test-Path "lib/libgtest.a")) { cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ ..; mingw32-make }
+          cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ -DCMAKE_INSTALL_PREFIX=../install ..
+          mingw32-make
+          mingw32-make install
+
+      - name: Set environment variables for Google Test
+        run: |
+          echo "GTEST_HOME=$GITHUB_WORKSPACE/googletest/install" >> $GITHUB_ENV
+          echo "$GITHUB_WORKSPACE/googletest/install/lib" >> $GITHUB_PATH
 
       - name: Build project (Windows) with static linking
         run: make all
 
       - name: Build and Run Tests (Windows)
         run: make test
+
+      - name: Run Google Test Executable
+        run: $GITHUB_WORKSPACE/build/test_runner.exe
 
       - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v4
