@@ -38,7 +38,8 @@ jobs:
           if (!(Test-Path "lib/libgtest.a")) { cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ ..; mingw32-make }
 
       - name: Debug Google Test headers
-        run: find googletest -name gtest.h
+        shell: pwsh
+        run: Get-ChildItem -Path googletest -Recurse -Filter gtest.h
 
       - name: Build project (Windows)
         run: make
