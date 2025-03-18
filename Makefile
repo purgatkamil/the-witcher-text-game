@@ -19,14 +19,14 @@ TARGET := $(BUILD_DIR)/app.exe
 GTEST_INCLUDES := -I$(GTEST_INSTALL)/include
 GTEST_LIBS := -L$(GTEST_INSTALL)/lib -lgtest -lgtest_main
 
-$(GTEST_LIBS):
-	git clone https://github.com/google/googletest.git || true
+$(GTEST_INSTALL):
+	@if [ ! -d "$(GTEST_DIR)" ]; then git clone https://github.com/google/googletest.git $(GTEST_DIR); fi
 	mkdir -p $(GTEST_BUILD)
-	cd $(GTEST_BUILD) && cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ -DCMAKE_INSTALL_PREFIX=../install ..
+	cd $(GTEST_BUILD) && cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ -DCMAKE_INSTALL_PREFIX=$(GTEST_INSTALL) ..
 	cd $(GTEST_BUILD) && mingw32-make && mingw32-make install
 
 # ---- Kompilacja aplikacji ----
-all: $(TARGET)
+all: $(GTEST_INSTALL) $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(BUILD_DIR)
@@ -45,7 +45,7 @@ $(TEST_BINARY): $(TEST_OBJECTS) $(GTEST_LIBS)
 	@mkdir -p $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) $(TEST_OBJECTS) $(GTEST_LIBS) -pthread -o $(TEST_BINARY)
 
-$(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
+$(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp | $(GTEST_INSTALL)
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) -c $< -o $@
 
