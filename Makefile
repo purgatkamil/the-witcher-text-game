@@ -14,7 +14,7 @@ OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/app_%.o, $(SOURCES))
 TARGET := $(BUILD_DIR)/app.exe  # Ensure .exe extension on Windows
 
 # ---- Google Test ----
-GTEST_INCLUDES := -I$(GTEST_DIR)/include -I$(GTEST_DIR)/googletest/include  # Ensure correct include path
+GTEST_INCLUDES := -I$(GTEST_DIR)/googletest/include -I$(GTEST_DIR)/googletest/include  # Ensure correct include path
 GTEST_LIBS := $(GTEST_BUILD)/lib/libgtest.a $(GTEST_BUILD)/lib/libgtest_main.a
 
 $(GTEST_LIBS):
