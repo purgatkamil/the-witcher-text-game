@@ -14,16 +14,17 @@ OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/app_%.o, $(SOURCES))
 TARGET := $(BUILD_DIR)/app.exe  # Ensure .exe extension on Windows
 
 # ---- Google Test ----
+GTEST_INCLUDES := -I$(GTEST_DIR)/include -I$(GTEST_DIR)/googletest/include  # Ensure correct include path
 GTEST_LIBS := $(GTEST_BUILD)/lib/libgtest.a $(GTEST_BUILD)/lib/libgtest_main.a
-GTEST_INCLUDES := -I$(GTEST_DIR)/googletest/include
 
 $(GTEST_LIBS):
 	git clone https://github.com/google/googletest.git || true
-	mkdir -p $(GTEST_BUILD) && cd $(GTEST_BUILD) && cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ .. && mingw32-make
+	mkdir -p $(GTEST_BUILD)
+	cd $(GTEST_BUILD) && cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ .. && mingw32-make
 
 # ---- Build Everything ----
 .PHONY: all
-all: app test  # Now `make` alone will build both app and test
+all: app test  # Now `make` alone builds both app and tests
 
 # ---- Application Compilation ----
 .PHONY: app
@@ -43,14 +44,14 @@ TEST_OBJECTS := $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/test_%.o, $(TEST_SOUR
 TEST_BINARY := $(BUILD_DIR)/test_runner.exe  # Ensure .exe extension on Windows
 
 .PHONY: test
-test: $(TEST_BINARY)
+test: $(GTEST_LIBS) $(TEST_BINARY)  # Ensure Google Test is built before compiling tests
 
 # Compile test binary
 $(TEST_BINARY): $(TEST_OBJECTS) $(GTEST_LIBS)
 	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) $(TEST_OBJECTS) $(GTEST_LIBS) -pthread -o $(TEST_BINARY)
 
 # Compile test object files
-$(BUILD_DIR)/test_%.o: $(TEST_DIR)/%.cpp
+$(BUILD_DIR)/test_%.o: $(TEST_DIR)/%.cpp $(GTEST_LIBS)  # Ensure Google Test is built first
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) -c $< -o $@
 
