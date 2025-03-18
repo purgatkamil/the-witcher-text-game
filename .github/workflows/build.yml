@@ -40,6 +40,9 @@ jobs:
       - name: Build project (Windows) with static linking
         run: make all
 
+      - name: Build and Run Tests (Windows)
+        run: make test
+
       - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v4
         with:
