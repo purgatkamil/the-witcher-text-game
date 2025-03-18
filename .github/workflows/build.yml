@@ -81,6 +81,9 @@ jobs:
       - name: Build and Run Tests (Windows)
         run: make test
 
+      - name: Debug Build Directory (Windows)
+        run: dir build
+
       - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v4
         with:
