@@ -14,10 +14,12 @@ OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/app_%.o, $(SOURCES))
 TARGET := $(BUILD_DIR)/app.exe  # Ensure .exe extension on Windows
 
 # ---- Google Test ----
-GTEST_INCLUDES := -I$(GTEST_DIR)/googletest/include  # Correct include path
-GTEST_LIBS := $(GTEST_BUILD)/lib/libgtest.a $(GTEST_BUILD)/lib/libgtest_main.a
+GTEST_INCLUDES := -I$(GTEST_DIR)/googletest/include  # Poprawiona ścieżka do nagłówków
+GTEST_LIB_PATH := -L$(GTEST_BUILD)/lib               # Poprawiona ścieżka do bibliotek
+GTEST_LIBS := -lgtest -lgtest_main -pthread         # Poprawne linkowanie Google Test
 
 $(GTEST_LIBS):
+	@echo "Cloning and building Google Test..."
 	git clone https://github.com/google/googletest.git || true
 	mkdir -p $(GTEST_BUILD)
 	cd $(GTEST_BUILD) && cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ .. && mingw32-make
@@ -47,7 +49,7 @@ test: $(GTEST_LIBS) $(TEST_BINARY)  # Ensure Google Test is built before compili
 
 # Compile test binary
 $(TEST_BINARY): $(TEST_OBJECTS) $(GTEST_LIBS)
-	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) $(TEST_OBJECTS) $(GTEST_LIBS) -pthread -o $(TEST_BINARY)
+	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) $(GTEST_LIB_PATH) $(TEST_OBJECTS) $(GTEST_LIBS) -o $(TEST_BINARY)
 
 # Compile test object files
 $(BUILD_DIR)/test_%.o: $(TEST_DIR)/%.cpp $(GTEST_LIBS)  # Ensure Google Test is built first
