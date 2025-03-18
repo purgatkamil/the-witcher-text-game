@@ -38,7 +38,7 @@ jobs:
           if (!(Test-Path "lib/libgtest.a")) { cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ ..; mingw32-make }
 
       - name: Build project (Windows) with static linking
-        run: make
+        run: make all
 
       - name: Build and Run Tests (Windows)
         run: make test
