@@ -29,7 +29,7 @@ jobs:
         run: make external/googletest/build/lib/libgtest.a
 
       - name: Build project (Windows)
-        run: make
+        run: make all
 
       - name: Build and Run Tests (Windows)
         run: make test
