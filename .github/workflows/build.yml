@@ -26,7 +26,7 @@ jobs:
         run: g++ --version
 
       - name: Build Google Test
-        run: make $(GTEST_BUILD)/lib/libgtest.a
+        run: make external/googletest/build/lib/libgtest.a
 
       - name: Build project (Windows)
         run: make
