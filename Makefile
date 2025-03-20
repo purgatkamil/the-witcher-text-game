@@ -57,7 +57,7 @@ $(TEST_BINARY): $(TEST_OBJECTS) $(SRC_OBJECTS) $(GTEST_BUILD)/lib/libgtest.a
 	@mkdir -p $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) $(GTEST_LIB_PATH) $(TEST_OBJECTS) $(SRC_OBJECTS) $(GTEST_LIBS) -o $(TEST_BINARY)
 
-$(BUILD_DIR)/test_%.o: $(TEST_DIR)/%.cpp $(GTEST_BUILD)/lib/libgtest.a
+$(BUILD_DIR)/test_%.o: $(TEST_DIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) -c $< -o $@
 

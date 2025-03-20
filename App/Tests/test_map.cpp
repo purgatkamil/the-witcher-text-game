@@ -76,8 +76,3 @@ TEST(WorldTest, DisplayLocationTest) {
 
     EXPECT_NE(output.find("You are in: Kaer Morhen"), std::string::npos);
 }
-
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
