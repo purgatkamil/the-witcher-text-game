@@ -43,22 +43,27 @@ $(BUILD_DIR)/app_%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Test compilation
 TEST_SOURCES := $(shell find $(TEST_DIR) -type f -name "*.cpp")
+SRC_SOURCES := $(shell find $(SRC_DIR) -type f -name "*.cpp" ! -path "$(TEST_DIR)/*" ! -name "App.cpp")
 TEST_OBJECTS := $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/test_%.o, $(TEST_SOURCES))
+SRC_OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/app_%.o, $(SRC_SOURCES))
 TEST_BINARY := $(BUILD_DIR)/test_runner.exe
 
 .PHONY: test
 test: $(GTEST_BUILD)/lib/libgtest.a $(TEST_BINARY)
+	./$(TEST_BINARY)
 
-$(TEST_BINARY): $(TEST_OBJECTS) $(GTEST_BUILD)/lib/libgtest.a
+$(TEST_BINARY): $(TEST_OBJECTS) $(SRC_OBJECTS) $(GTEST_BUILD)/lib/libgtest.a
 	@mkdir -p $(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) $(GTEST_LIB_PATH) $(TEST_OBJECTS) $(GTEST_LIBS) -o $(TEST_BINARY)
+	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) $(GTEST_LIB_PATH) $(TEST_OBJECTS) $(SRC_OBJECTS) $(GTEST_LIBS) -o $(TEST_BINARY)
 
 $(BUILD_DIR)/test_%.o: $(TEST_DIR)/%.cpp $(GTEST_BUILD)/lib/libgtest.a
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(GTEST_INCLUDES) -c $< -o $@
 
-# Cleanup
+$(BUILD_DIR)/app_%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
 clean:
 	rm -rf $(BUILD_DIR) $(GTEST_BUILD)
