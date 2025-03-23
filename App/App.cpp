@@ -1,6 +1,6 @@
 #include "Map/map.hpp"
 #include "Character/character.hpp"
-#include "Fight/fight.hpp"
+#include "Geralt/geralt.hpp"
 
 void runAutoTest(void)
 {
@@ -14,7 +14,8 @@ int main(int argc, char* argv[]) {
     }
 
     GameWorld world;
-    Geralt Geralt;
+    Stats geraltStats = { 10, 8, 9, 6, 100 };
+    Geralt Geralt("Geralt of Rivia", geraltStats);
 
     createWorld(world, Geralt.getLocationPtr());
     
