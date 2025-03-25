@@ -73,9 +73,9 @@ private:
 public:
     GeraltSkillTree();
 
-    bool unlockTalent(TalentID talentId);
+    //bool unlockTalent(TalentID talentId);
 
-    bool isUnlocked(TalentID talentId) const;
+    //bool isUnlocked(TalentID talentId) const;
 
-    const TalentNode* getTalentData(TalentID talentId) const;
+    //const TalentNode* getTalentData(TalentID talentId) const;
 };

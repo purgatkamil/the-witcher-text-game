@@ -11,6 +11,7 @@ GeraltSkillTree::GeraltSkillTree()
         "Zwiększa obrażenia melee o +10%.",
         false,
         {}
+    };
 
     talents[TalentID::STRENGTH_BRONZE_2] = {
         TalentID::STRENGTH_BRONZE_2,
@@ -36,7 +37,6 @@ GeraltSkillTree::GeraltSkillTree()
         { TalentID::STRENGTH_SILVER_1 }
     };
 
- 
     talents[TalentID::DEXTERITY_BRONZE_1] = {
         TalentID::DEXTERITY_BRONZE_1,
         "Dexterity (Bronze I)",
@@ -84,48 +84,4 @@ GeraltSkillTree::GeraltSkillTree()
         false,
         { TalentID::AARD_BRONZE_1 }
     };
-}
-
-bool GeraltSkillTree::unlockTalent(TalentID talentId)
-{
-    auto it = talents.find(talentId);
-    if (it == talents.end()) {
-        std::cout << "Talent not found!\n";
-        return false;
-    }
-
-    if (it->second.unlocked) {
-        std::cout << "Talent " << it->second.name << " is already unlocked!\n";
-        return false;
-    }
-
-    for (auto prereq : it->second.prerequisites) {
-        if (!isUnlocked(prereq)) {
-            std::cout << "Cannot unlock " << it->second.name 
-                      << ". Prerequisite not met!\n";
-            return false;
-        }
-    }
-
-    it->second.unlocked = true;
-    std::cout << "Unlocked talent: " << it->second.name << "\n";
-    return true;
-}
-
-bool GeraltSkillTree::isUnlocked(TalentID talentId) const
-{
-    auto it = talents.find(talentId);
-    if (it != talents.end()) {
-        return it->second.unlocked;
-    }
-    return false;
-}
-
-const TalentNode* GeraltSkillTree::getTalentData(TalentID talentId) const
-{
-    auto it = talents.find(talentId);
-    if (it != talents.end()) {
-        return &(it->second);
-    }
-    return nullptr;
 }
