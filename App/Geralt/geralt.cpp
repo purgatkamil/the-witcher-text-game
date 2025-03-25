@@ -69,12 +69,12 @@ void Geralt::removePotion(int index)
 
 bool Geralt::unlockTalent(TalentID talentId)
 {
-    return skillTree.unlockTalent(talentId);
+    //return skillTree.unlockTalent(talentId);
 }
 
 bool Geralt::isTalentUnlocked(TalentID talentId) const
 {
-    return skillTree.isUnlocked(talentId);
+    //return skillTree.isUnlocked(talentId);
 }
 
 void Geralt::attack(Character& target)
