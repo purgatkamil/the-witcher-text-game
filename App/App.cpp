@@ -2,22 +2,22 @@
 #include "Character/character.hpp"
 #include "Geralt/geralt.hpp"
 
-void runAutoTest() {
+void runAutoTest(void) {
     std::cout << "Running auto test...\n";
 
-    GameWorld world;
-    Geralt geralt("TestGeralt", Stats{ 10, 8, 9, 6, 100 });
+    GameWorld test_world;
+    Geralt test_geralt("TestGeralt", Stats{ 10, 8, 9, 6, 100 });
 
-    createWorld(world, geralt.getLocationPtr());
+    createWorld(test_world, test_geralt.getLocationPtr());
     Descriptions::initialize();
 
-    displayLocation(geralt.getLocationPtr());
+    displayLocation(test_geralt.getLocationPtr());
 
     std::vector<std::string> path = { "middle", "upper", "fortress", "laboratory", "elementalstone" };
 
     for (const auto& dir : path) {
-        geralt.move(dir);
-        displayLocation(geralt.getLocationPtr());
+        test_geralt.move(dir);
+        displayLocation(test_geralt.getLocationPtr());
     }
 
     std::cout << "Auto test completed.\n";
