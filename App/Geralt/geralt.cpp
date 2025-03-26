@@ -22,7 +22,7 @@ std::shared_ptr<Location> Geralt::getCurrentLocation() const {
 void Geralt::move(const std::string& command)
 {
     if (current_location && current_location->exits.find(command) != current_location->exits.end()) {
-        current_location = current_location->exits[command];
+        current_location = current_location->exits[command].lock();
         std::cout << "Geralt moved to: " << current_location->name << std::endl;
     } else {
         std::cout << "You cannot go that way." << std::endl;
