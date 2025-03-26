@@ -1,4 +1,4 @@
-name: Build and Test (Windows)
+name: Build and Test (Cross-Platform)
 
 on:
   push:
@@ -8,8 +8,34 @@ on:
       - tests/*
 
 jobs:
+  build-ubuntu:
+    name: Build and Test on Ubuntu (Valgrind)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y valgrind g++ make
+
+      - name: Build Google Test
+        run: make external/googletest/build/lib/libgtest.a
+
+      - name: Build project
+        run: make all
+
+      - name: Run tests with Valgrind
+        run: |
+          valgrind --error-exitcode=1 --leak-check=full ./build/app.exe
+
   build-windows:
+    name: Build and Test on Windows
     runs-on: windows-latest
+    needs: build-ubuntu
+    if: success()
 
     steps:
       - name: Checkout repository (with submodules)
