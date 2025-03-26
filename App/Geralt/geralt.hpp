@@ -7,7 +7,7 @@
 class Geralt : public Character
 {
 private:
-    Location* current_location; 
+    std::shared_ptr<Location>  current_location; 
     int energy;
     int toxicity; 
     std::vector<SpecialAbility> activePotions;
@@ -17,8 +17,8 @@ private:
 public:
     Geralt(const std::string& name, const Stats& baseStats);
 
-    Location*& getLocationPtr();
-    Location getCurrentLocation();
+    std::shared_ptr<Location>& getLocationPtr();
+    std::shared_ptr<Location> getCurrentLocation() const;
     void move(const std::string& command);
 
     int getEnergy() const;

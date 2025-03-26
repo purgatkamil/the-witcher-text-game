@@ -10,14 +10,13 @@ Geralt::Geralt(const std::string& name, const Stats& baseStats)
     std::cout << "Geralt constructed with name: " << name << std::endl;
 }
 
-Location*& Geralt::getLocationPtr()
+std::shared_ptr<Location> & Geralt::getLocationPtr()
 {
     return current_location;
 }
 
-Location Geralt::getCurrentLocation()
-{
-    return *current_location;
+std::shared_ptr<Location> Geralt::getCurrentLocation() const {
+    return current_location;
 }
 
 void Geralt::move(const std::string& command)

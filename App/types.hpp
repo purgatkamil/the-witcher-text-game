@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include <memory>
 
 class Location;
 
@@ -25,10 +26,10 @@ typedef enum
     NUMBER_OF_LOCATIONS,
 } Locations_e;
 
-typedef std::map<std::string, Location*> GameWorld;
+typedef std::map<std::string, std::shared_ptr<Location>> GameWorld;
 
-typedef std::map<std::string, Location*> LocalExits;
+typedef std::map<std::string, std::weak_ptr<Location>> LocalExits;
 
-typedef std::map<std::string, Location*> GlobalExits;
+typedef std::map<std::string, std::weak_ptr<Location>> GlobalExits;
 
 typedef std::map<Locations_e, std::string> DescriptionsMap;
