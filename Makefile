@@ -9,6 +9,16 @@ BUILD_DIR := build
 GTEST_DIR := external/googletest
 GTEST_BUILD := $(GTEST_DIR)/build
 
+# Detect platform
+ifeq ($(OS),Windows_NT)
+	CMAKE_GENERATOR := "MinGW Makefiles"
+	MAKE_CMD := mingw32-make
+else
+	UNAME_S := $(shell uname -s)
+	CMAKE_GENERATOR := "Unix Makefiles"
+	MAKE_CMD := make
+endif
+
 # Application source files
 SOURCES := $(shell find $(SRC_DIR) -type f -name "*.cpp" ! -path "$(TEST_DIR)/*")
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/app_%.o, $(SOURCES))
@@ -26,7 +36,7 @@ $(GTEST_DIR):
 # Build Google Test if not built
 $(GTEST_BUILD)/lib/libgtest.a: $(GTEST_DIR)
 	mkdir -p $(GTEST_BUILD)
-	cd $(GTEST_BUILD) && cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++ .. && mingw32-make
+	cd $(GTEST_BUILD) && cmake -G $(CMAKE_GENERATOR) -DCMAKE_CXX_COMPILER=$(CXX) ../.. && $(MAKE_CMD)
 
 # Application compilation
 .PHONY: all
@@ -65,5 +75,6 @@ $(BUILD_DIR)/app_%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+.PHONY: clean
 clean:
 	rm -rf $(BUILD_DIR) $(GTEST_BUILD)
