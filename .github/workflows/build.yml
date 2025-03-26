@@ -27,9 +27,9 @@ jobs:
       - name: Build project
         run: make all
 
-      - name: Run tests with Valgrind
-        run: |
-          valgrind --error-exitcode=1 --leak-check=full ./build/app.exe
+      - name: Run Valgrind in test mode
+        run: valgrind --error-exitcode=1 --leak-check=full ./build/app.exe --test-mode
+
 
   build-windows:
     name: Build and Test on Windows
