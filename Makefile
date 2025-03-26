@@ -36,7 +36,7 @@ $(GTEST_DIR):
 # Build Google Test if not built
 $(GTEST_BUILD)/lib/libgtest.a: $(GTEST_DIR)
 	mkdir -p $(GTEST_BUILD)
-	cd $(GTEST_BUILD) && cmake -G $(CMAKE_GENERATOR) -DCMAKE_CXX_COMPILER=$(CXX) $(GTEST_DIR) && $(MAKE_CMD)
+	cd $(GTEST_BUILD) && cmake -G $(CMAKE_GENERATOR) -DCMAKE_CXX_COMPILER=$(CXX) $(CURDIR)/$(GTEST_DIR) && $(MAKE_CMD)
 
 # Application compilation
 .PHONY: all
