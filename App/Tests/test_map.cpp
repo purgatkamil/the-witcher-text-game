@@ -31,7 +31,7 @@ TEST(LocationTest, AddExitTest) {
     std::shared_ptr<Location> locB = std::make_shared<Location>(KAER_MORHEN_COURTYARD_LOWER, "Lower Courtyard", "lower");
 
     locA->addExit(locB);
-    EXPECT_EQ(locA->exits["lower"], locB);
+    EXPECT_EQ(locA->exits["lower"].lock(), locB);
 }
 
 TEST(LocationTest, AddGlobalExitTest) {
@@ -40,7 +40,7 @@ TEST(LocationTest, AddGlobalExitTest) {
     std::shared_ptr<Location> locB = std::make_shared<Location>(KAER_MORHEN_FORTRESS, "Fortress", "fortress");
 
     locA->addGlobalExit(locB);
-    EXPECT_EQ(locA->globalExits["fortress"], locB);
+    EXPECT_EQ(locA->globalExits["fortress"].lock(), locB);
 }
 
 TEST(LocationTest, ConnectTest) {
@@ -50,8 +50,8 @@ TEST(LocationTest, ConnectTest) {
 
     locA->connect(locB);
 
-    EXPECT_EQ(locA->exits["lower"], locB);
-    EXPECT_EQ(locB->exits["kaermorhen"], locA);
+    EXPECT_EQ(locA->exits["lower"].lock(), locB);
+    EXPECT_EQ(locB->exits["kaermorhen"].lock(), locA);
 }
 
 TEST(WorldTest, CreateWorldTest) {
