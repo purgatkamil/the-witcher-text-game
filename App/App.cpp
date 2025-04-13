@@ -4,7 +4,7 @@
 
 int main() {
     GameWorld world;
-    Stats geraltStats = { 10, 8, 9, 6, 100 };
+    Stats geraltStats = { 10, 8, 100 };
     Geralt Geralt("Geralt of Rivia", geraltStats);
 
     createWorld(world, Geralt.getLocationPtr());
