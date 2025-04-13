@@ -1,18 +1,14 @@
 #pragma once
 
 #include "../Character/character.hpp"
-#include "../Geralt/geralt_skilltree.hpp"
-#include "../Map/map.hpp" 
+#include "../Map/map.hpp"
 
 class Geralt : public Character
 {
 private:
     Location* current_location; 
     int energy;
-    int toxicity; 
-    std::vector<SpecialAbility> activePotions;
-
-    GeraltSkillTree skillTree;
+    int toxicity;
 
 public:
     Geralt(const std::string& name, const Stats& baseStats);
@@ -26,13 +22,6 @@ public:
     int getToxicity() const;
     void setToxicity(int t);
 
-    void drinkPotion(const SpecialAbility& potion);
-    void removePotion(int index);
-
-    bool unlockTalent(TalentID talentId);
-    bool isTalentUnlocked(TalentID talentId) const;
-
     void attack(Character& target) override;
     void takeDamage(int amount) override;
-    void useSpecialAbility(int index) override;
 };

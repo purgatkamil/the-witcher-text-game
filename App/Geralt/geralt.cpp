@@ -50,33 +50,6 @@ void Geralt::setToxicity(int t)
     toxicity = t;
 }
 
-void Geralt::drinkPotion(const SpecialAbility& potion)
-{
-    activePotions.push_back(potion);
-    std::cout << getName() << " drinks potion: " << potion.name << "\n";
-}
-
-void Geralt::removePotion(int index)
-{
-    if (index < 0 || index >= (int)activePotions.size()) {
-        std::cout << "Invalid potion index!\n";
-        return;
-    }
-    std::cout << getName() << " potion expired: " 
-              << activePotions[index].name << "\n";
-    activePotions.erase(activePotions.begin() + index);
-}
-
-bool Geralt::unlockTalent(TalentID talentId)
-{
-    //return skillTree.unlockTalent(talentId);
-}
-
-bool Geralt::isTalentUnlocked(TalentID talentId) const
-{
-    //return skillTree.isUnlocked(talentId);
-}
-
 void Geralt::attack(Character& target)
 {
     std::cout << "[Geralt special attack logic?]\n";
@@ -87,10 +60,4 @@ void Geralt::takeDamage(int amount)
 {
     std::cout << "[Geralt defensive logic?]\n";
     Character::takeDamage(amount);
-}
-
-void Geralt::useSpecialAbility(int index)
-{
-    std::cout << "[Geralt uses special ability - check energy/toxicity?]\n";
-    Character::useSpecialAbility(index);
 }
