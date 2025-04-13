@@ -4,7 +4,7 @@
 #include <iostream>
 
 Stats createDefaultStats() {
-    return {10, 10, 10, 10, 100};
+    return {10, 5, 100};
 }
 
 TEST(CharacterTest, ConstructorInitializesFieldsCorrectly) {
@@ -29,36 +29,22 @@ TEST(CharacterTest, TakeDamageCannotGoBelowZero) {
     EXPECT_EQ(c.getStats().health, 0);
 }
 
-TEST(CharacterTest, AddResistanceStoresCorrectly) {
-    Character c("Hero", createDefaultStats());
-    c.addResistance("fire", 0.25f);
-    // No public getter to verify the stored value directly, placeholder for now
-    SUCCEED();
-}
+TEST(CharacterTest, AttackReducesHealthBasedOnDefence) {
+    Stats attackerStats = {20, 5, 100};
+    Stats defenderStats = {10, 10, 100};
+    Character attacker("Warrior", attackerStats);
+    Character defender("Goblin", defenderStats);
 
-TEST(CharacterTest, AddWeaknessStoresCorrectly) {
-    Character c("Hero", createDefaultStats());
-    c.addWeakness("ice", -0.4f);
-    // No public getter to verify the stored value directly, placeholder for now
-    SUCCEED();
-}
-
-TEST(CharacterTest, AttackPrintsCorrectMessage) {
-    Character c1("Warrior", createDefaultStats());
-    Character c2("Goblin", createDefaultStats());
-
-    testing::internal::CaptureStdout();
-    c1.attack(c2);
-    std::string output = testing::internal::GetCapturedStdout();
-
-    EXPECT_NE(output.find("Warrior attacks Goblin!"), std::string::npos);
+    attacker.attack(defender);
+    EXPECT_EQ(defender.getStats().health, 90);
 }
 
 TEST(CharacterTest, SetStatsChangesStats) {
     Character c("Hero", createDefaultStats());
-    Stats newStats = {5, 5, 5, 5, 50};
+    Stats newStats = {15, 10, 50};
     c.setStats(newStats);
 
     EXPECT_EQ(c.getStats().health, 50);
-    EXPECT_EQ(c.getStats().strength, 5);
+    EXPECT_EQ(c.getStats().attack, 15);
+    EXPECT_EQ(c.getStats().defence, 10);
 }
